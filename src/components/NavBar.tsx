@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from './AuthProvider';
+import Logo from './Logo';
 
 const NavBar: React.FC = () => {
   const { user, logout } = useAuth();
@@ -8,6 +9,7 @@ const NavBar: React.FC = () => {
     <nav className="bg-white shadow">
       <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-6 justify-between">
         <div className="flex items-center gap-6">
+          <Logo size="md" />
           <NavLink
             to="/dashboard"
             className={({ isActive }) =>

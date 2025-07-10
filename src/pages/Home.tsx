@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../components/AuthProvider';
 import { Navigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
+import Logo from '../components/Logo';
 
 const Home: React.FC = () => {
   const { user, login } = useAuth();
@@ -13,7 +14,7 @@ const Home: React.FC = () => {
   return (
     <div className="w-screen h-screen bg-gray-50 flex items-center justify-center p-6">
       <div className="bg-white rounded-lg shadow-md max-w-md w-full p-8 flex flex-col items-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Food Price Tracker</h1>
+        <Logo size="lg" clickable={false} className="mb-2" />
         <p className="text-gray-600 mb-6 text-center">Track and monitor food prices across different stores</p>
         <button
           onClick={login}

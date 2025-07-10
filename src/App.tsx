@@ -12,12 +12,12 @@ const AppRoutes: React.FC = () => {
   return (
     <>
       {user && <NavBar />}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
               <FoodPriceTracker />
             </ProtectedRoute>
           }
@@ -27,10 +27,10 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <UserPreferences />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
     </>
   );
 };
