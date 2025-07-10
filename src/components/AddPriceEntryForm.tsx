@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Plus } from 'lucide-react';
+import { Button, Input, Select, Card, Loading } from './ui';
 import type { CreatePriceEntryInput, Product, Store } from '../types/database';
 
 interface AddPriceEntryFormProps {
@@ -9,7 +10,15 @@ interface AddPriceEntryFormProps {
   loading?: boolean;
 }
 
-const AddPriceEntryForm: React.FC<AddPriceEntryFormProps> = ({ 
+const UNIT_OPTIONS = [
+  { value: 'per lb', label: 'per lb' },
+  { value: 'per kg', label: 'per kg' },
+  { value: 'each', label: 'each' },
+  { value: 'per dozen', label: 'per dozen' },
+  { value: 'per gallon', label: 'per gallon' },
+];
+
+const AddPriceEntryForm: React.FC<AddPriceEntryFormProps> = React.memo(({ 
   onAddEntry, 
   products, 
   stores, 
@@ -26,37 +35,43 @@ const AddPriceEntryForm: React.FC<AddPriceEntryFormProps> = ({
 
   const [submitting, setSubmitting] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+  // Memoize product and store options
+  const productOptions = useMemo(() => [
+    { value: '', label: 'Select a product' },
+    ...products.map(product => ({
+      value: product.id,
+      label: `${product.name} (${product.category})`
+    }))
+  ], [products]);
 
-    // Auto-fill product name when product is selected
-    if (name === 'productId') {
-      const selectedProduct = products.find(p => p.id === value);
-      if (selectedProduct) {
-        setForm(prev => ({ 
-          ...prev, 
-          productId: value, 
-          productName: selectedProduct.name,
-          unit: selectedProduct.defaultUnit 
-        }));
-      }
-    }
+  const storeOptions = useMemo(() => [
+    { value: '', label: 'Select a store' },
+    ...stores.map(store => ({
+      value: store.id,
+      label: `${store.name} (${store.location})`
+    }))
+  ], [stores]);
 
-    // Auto-fill store name when store is selected
-    if (name === 'storeId') {
-      const selectedStore = stores.find(s => s.id === value);
-      if (selectedStore) {
-        setForm(prev => ({ 
-          ...prev, 
-          storeId: value, 
-          storeName: selectedStore.name 
-        }));
-      }
-    }
-  };
+  const handleProductChange = useCallback((value: string) => {
+    const selectedProduct = products.find(p => p.id === value);
+    setForm(prev => ({ 
+      ...prev, 
+      productId: value, 
+      productName: selectedProduct?.name || '',
+      unit: selectedProduct?.defaultUnit || prev.unit
+    }));
+  }, [products]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleStoreChange = useCallback((value: string) => {
+    const selectedStore = stores.find(s => s.id === value);
+    setForm(prev => ({ 
+      ...prev, 
+      storeId: value, 
+      storeName: selectedStore?.name || ''
+    }));
+  }, [stores]);
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.price || !form.storeId || !form.productId) return;
 
@@ -85,109 +100,69 @@ const AddPriceEntryForm: React.FC<AddPriceEntryFormProps> = ({
     } finally {
       setSubmitting(false);
     }
-  };
+  }, [form, onAddEntry]);
 
-  // Add these style classes for select
-  const selectClass =
-    'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900';
+  const isFormValid = form.price && form.storeId && form.productId;
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Add New Price Entry</h2>
-        <div className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        </div>
-      </div>
+      <Card title="Add New Price Entry">
+        <Loading text="Loading form..." />
+      </Card>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">Add New Price Entry</h2>
+    <Card title="Add New Price Entry">
       <form className="space-y-4" onSubmit={handleSubmit}>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Product</label>
-          <select
-            name="productId"
-            value={form.productId}
-            onChange={handleChange}
-            className={selectClass}
-            required
-          >
-            <option value="">Select a product</option>
-            {products.map(product => (
-              <option key={product.id} value={product.id}>
-                {product.name} ({product.category})
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="Product"
+          options={productOptions}
+          value={form.productId}
+          onChange={handleProductChange}
+          required
+        />
 
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
-            <input
-              type="number"
-              step="0.01"
-              name="price"
-              value={form.price}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
-              placeholder="0.00"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Unit</label>
-            <select
-              name="unit"
-              value={form.unit}
-              onChange={handleChange}
-              className={selectClass}
-            >
-              <option value="per lb">per lb</option>
-              <option value="per kg">per kg</option>
-              <option value="each">each</option>
-              <option value="per dozen">per dozen</option>
-              <option value="per gallon">per gallon</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Store</label>
-          <select
-            name="storeId"
-            value={form.storeId}
-            onChange={handleChange}
-            className={selectClass}
+          <Input
+            label="Price ($)"
+            type="number"
+            step="0.01"
+            value={form.price}
+            onChange={(e) => setForm(prev => ({ ...prev, price: e.target.value }))}
+            placeholder="0.00"
             required
-          >
-            <option value="">Select a store</option>
-            {stores.map(store => (
-              <option key={store.id} value={store.id}>
-                {store.name} ({store.location})
-              </option>
-            ))}
-          </select>
+          />
+          <Select
+            label="Unit"
+            options={UNIT_OPTIONS}
+            value={form.unit}
+            onChange={(value) => setForm(prev => ({ ...prev, unit: value }))}
+          />
         </div>
 
-        <button
+        <Select
+          label="Store"
+          options={storeOptions}
+          value={form.storeId}
+          onChange={handleStoreChange}
+          required
+        />
+
+        <Button
           type="submit"
-          disabled={submitting || !form.productId || !form.price || !form.storeId}
-          className="w-full bg-blue-600 cursor-pointer text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed"
+          disabled={!isFormValid || submitting}
+          loading={submitting}
+          className="w-full flex justify-center cursor-pointer"
         >
-          {submitting ? (
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-          ) : (
-            <Plus className="h-4 w-4 mr-2" />
-          )}
-          {submitting ? 'Adding...' : 'Add Price Entry'}
-        </button>
+          <Plus className="h-4 w-4 mr-2 mt-1" />
+          Add Price Entry
+        </Button>
       </form>
-    </div>
+    </Card>
   );
-};
+});
+
+AddPriceEntryForm.displayName = 'AddPriceEntryForm';
 
 export default AddPriceEntryForm; 
