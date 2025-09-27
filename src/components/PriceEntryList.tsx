@@ -25,7 +25,7 @@ const PriceEntryList: React.FC<PriceEntryListProps> = ({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 max-w-md w-full mx-auto">
       <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Price Entries</h2>
       <div className="space-y-3 max-h-96 overflow-y-auto">
         {priceEntries.length === 0 ? (

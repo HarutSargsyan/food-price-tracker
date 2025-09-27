@@ -48,10 +48,10 @@ const StoreList: React.FC<StoreListProps> = ({
   }
 
   return (
-    <ul className="divide-y divide-gray-200">
+    <ul className="divide-y divide-gray-200 w-full max-w-md mx-auto bg-white rounded-lg shadow p-2 sm:p-4">
       {stores.map(store => (
-        <li key={store.id} className="flex items-center justify-between py-2">
-          <span className="font-medium text-gray-900">
+        <li key={store.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 px-2 gap-2">
+          <span className="font-medium text-gray-900 text-base">
             {store.name} 
             <span className="text-xs text-gray-500 ml-1">
               ({store.location})
@@ -60,7 +60,7 @@ const StoreList: React.FC<StoreListProps> = ({
           {store.name.toLowerCase() !== defaultStoreName.toLowerCase() && (
             <button 
               onClick={() => handleRemove(store.id)}
-              className="text-red-500 text-xs hover:underline transition-colors"
+              className="text-red-500 text-base hover:underline transition-colors py-2 px-3 rounded focus:outline-none focus:ring-2 focus:ring-red-300"
             >
               Remove
             </button>

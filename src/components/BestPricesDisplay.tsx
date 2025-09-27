@@ -80,7 +80,7 @@ const BestPricesDisplay: React.FC<BestPricesDisplayProps> = React.memo(({
   }
 
   return (
-    <Card title="Best Prices by Product">
+    <Card title="Best Prices by Product" className="max-w-2xl w-full mx-auto p-2 sm:p-4">
       <div className="space-y-4">
         {sortedBestPricesData.map(({ product, bestPrice, comparison }) => (
           <BestPriceCard

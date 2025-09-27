@@ -89,23 +89,24 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, loading = false }) 
   const unitOptions = UNIT_OPTIONS.map(option => ({ value: option, label: option }));
 
   return (
-    <Card title="Product Types">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <Card title="Product Types" className="max-w-md w-full mx-auto p-2 sm:p-4">
+      <form onSubmit={handleSubmit} className="space-y-4 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input
             label="Product Name"
             value={form.name}
             onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
             placeholder="Product name"
             required
+            className="w-full text-base"
           />
-          
           <div className="space-y-2">
             <Select
               label="Category"
               options={categoryOptions}
               value={form.category || 'Other'}
               onChange={handleCategoryChange}
+              className="w-full text-base"
             />
             {form.category === '' && (
               <Input
@@ -116,16 +117,17 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, loading = false }) 
                   setForm(prev => ({ ...prev, category: e.target.value }));
                 }}
                 required
+                className="w-full text-base"
               />
             )}
           </div>
-
           <div className="space-y-2">
             <Select
               label="Unit"
               options={unitOptions}
               value={form.defaultUnit || 'Other'}
               onChange={handleUnitChange}
+              className="w-full text-base"
             />
             {form.defaultUnit === '' && (
               <Input
@@ -136,16 +138,16 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, loading = false }) 
                   setForm(prev => ({ ...prev, defaultUnit: e.target.value }));
                 }}
                 required
+                className="w-full text-base"
               />
             )}
           </div>
         </div>
-
         <Button
           type="submit"
           loading={submitting || loading}
           disabled={!form.name || !form.category || !form.defaultUnit}
-          className="w-full"
+          className="w-full py-3 text-base rounded-lg"
         >
           Add Product
         </Button>

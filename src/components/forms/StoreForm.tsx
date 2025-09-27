@@ -32,15 +32,16 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSubmit, loading = false }) => {
   };
 
   return (
-    <Card title="Stores">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <Card title="Stores" className="max-w-md w-full mx-auto p-2 sm:p-4">
+      <form onSubmit={handleSubmit} className="space-y-4 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             label="Store Name"
             value={form.name}
             onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
             placeholder="Store name"
             required
+            className="w-full text-base"
           />
           <Input
             label="Location"
@@ -48,14 +49,14 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSubmit, loading = false }) => {
             onChange={(e) => setForm(prev => ({ ...prev, location: e.target.value }))}
             placeholder="Location"
             required
+            className="w-full text-base"
           />
         </div>
-
         <Button
           type="submit"
           loading={submitting || loading}
           disabled={!form.name || !form.location}
-          className="w-full"
+          className="w-full py-3 text-base rounded-lg"
         >
           Add Store
         </Button>

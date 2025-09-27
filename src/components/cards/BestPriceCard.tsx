@@ -43,10 +43,10 @@ const BestPriceCard: React.FC<BestPriceCardProps> = React.memo(({
   const isExpanded = selectedProduct === product.id;
 
   return (
-    <div className="border rounded-lg p-4">
-      <div className="flex items-center justify-between mb-3">
+    <div className="border rounded-lg p-3 sm:p-4 bg-white shadow-sm">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 gap-2">
         <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
-        <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+        <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded mt-1 sm:mt-0">
           {product.category}
         </span>
       </div>
@@ -74,7 +74,7 @@ const BestPriceCard: React.FC<BestPriceCardProps> = React.memo(({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Price Trend</span>
               <div className="flex items-center">
@@ -96,7 +96,7 @@ const BestPriceCard: React.FC<BestPriceCardProps> = React.memo(({
 
             <button
               onClick={() => onToggleComparison(product.id)}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              className="text-blue-600 hover:text-blue-800 text-sm font-medium w-full sm:w-auto py-2 px-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
             >
               {isExpanded ? 'Hide' : 'Show'} Price Comparison
             </button>
@@ -115,7 +115,7 @@ const BestPriceCard: React.FC<BestPriceCardProps> = React.memo(({
             {comparison.map((entry) => (
               <div
                 key={entry.id}
-                className={`flex items-center text-gray-700 justify-between p-2 rounded ${
+                className={`flex flex-col sm:flex-row items-start sm:items-center text-gray-700 justify-between p-2 rounded gap-2 ${
                   entry.id === bestPrice?.id ? 'bg-green-50 border border-green-200' : 'bg-gray-50'
                 }`}
               >
@@ -123,7 +123,7 @@ const BestPriceCard: React.FC<BestPriceCardProps> = React.memo(({
                   <Store className="h-4 w-4 text-gray-500 mr-2" />
                   <span className="text-sm font-medium">{entry.storeName}</span>
                 </div>
-                <div className="flex items-center space-x-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-1 sm:space-y-0 sm:space-x-4">
                   <span className="text-sm text-gray-600">{formatDate(entry.date)}</span>
                   <span className="text-sm font-semibold">${entry.price.toFixed(2)}</span>
                   {entry.id === bestPrice?.id && (

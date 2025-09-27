@@ -18,11 +18,11 @@ const FoodPriceTracker = () => {
   } = usePriceEntries();
 
   return (
-    <div className="bg-gray-50 p-6">
+    <div className="bg-gray-50 p-2 sm:p-6 min-h-screen">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Food Price Tracker</h1>
-          <p className="text-gray-600">Track and monitor food prices across different stores</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Food Price Tracker</h1>
+          <p className="text-gray-600 text-base sm:text-lg">Track and monitor food prices across different stores</p>
           {error && (
             <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
               {error}

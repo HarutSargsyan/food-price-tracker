@@ -113,17 +113,18 @@ const AddPriceEntryForm: React.FC<AddPriceEntryFormProps> = React.memo(({
   }
 
   return (
-    <Card title="Add New Price Entry">
-      <form className="space-y-4" onSubmit={handleSubmit}>
+    <Card title="Add New Price Entry" className="max-w-md mx-auto p-2 sm:p-4 rounded-lg shadow bg-white">
+      <form className="w-full space-y-4" onSubmit={handleSubmit}>
         <Select
           label="Product"
           options={productOptions}
           value={form.productId}
           onChange={handleProductChange}
           required
+          className="w-full text-base"
         />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             label="Price ($)"
             type="number"
@@ -132,12 +133,14 @@ const AddPriceEntryForm: React.FC<AddPriceEntryFormProps> = React.memo(({
             onChange={(e) => setForm(prev => ({ ...prev, price: e.target.value }))}
             placeholder="0.00"
             required
+            className="w-full text-base"
           />
           <Select
             label="Unit"
             options={UNIT_OPTIONS}
             value={form.unit}
             onChange={(value) => setForm(prev => ({ ...prev, unit: value }))}
+            className="w-full text-base"
           />
         </div>
 
@@ -147,13 +150,14 @@ const AddPriceEntryForm: React.FC<AddPriceEntryFormProps> = React.memo(({
           value={form.storeId}
           onChange={handleStoreChange}
           required
+          className="w-full text-base"
         />
 
         <Button
           type="submit"
           disabled={!isFormValid || submitting}
           loading={submitting}
-          className="w-full flex justify-center cursor-pointer"
+          className="w-full flex justify-center items-center py-3 text-base rounded-lg cursor-pointer"
         >
           <Plus className="h-4 w-4 mr-2 mt-1" />
           Add Price Entry

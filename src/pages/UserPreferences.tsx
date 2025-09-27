@@ -37,18 +37,18 @@ const UserPreferences: React.FC = () => {
   const error = productsError || storesError;
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-2 sm:p-6">
       <div className="w-full max-w-4xl mx-auto">
         <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold mb-2 text-gray-900">Your Shopping Preferences</h2>
-          <p className="text-gray-600 mb-4">Customize the stores and product types you shop for.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-900">Your Shopping Preferences</h2>
+          <p className="text-gray-600 mb-4 text-base sm:text-lg">Customize the stores and product types you shop for.</p>
           {error && <Error message={error} className="mb-4" />}
         </div>
         
         {isLoading ? (
           <Loading text="Loading preferences..." />
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
             {/* Products Section */}
             <div className="space-y-4">
               <ProductForm onSubmit={addProduct} loading={productsLoading} />
